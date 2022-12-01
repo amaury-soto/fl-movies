@@ -1,3 +1,4 @@
+import 'package:fl_movies_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -13,7 +14,9 @@ class DetailsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _CustomAppbar(),
-          SliverList(delegate: SliverChildListDelegate([_PosterAndTitle()]))
+          SliverList(
+              delegate: SliverChildListDelegate(
+                  [_PosterAndTitle(), _Overview(), CastingCard()]))
         ],
       ),
     );
@@ -37,6 +40,7 @@ class _CustomAppbar extends StatelessWidget {
             width: double.infinity,
             alignment: Alignment.bottomCenter,
             color: Colors.black12,
+            padding: EdgeInsets.only(bottom: 10),
             child: Text(
               'movie.title',
               style: TextStyle(fontSize: 16),
@@ -56,6 +60,8 @@ class _PosterAndTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -68,15 +74,53 @@ class _PosterAndTitle extends StatelessWidget {
             height: 150,
           ),
         ),
-        SizedBox(width: 20,),
+        SizedBox(
+          width: 20,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('movie.title', style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis, maxLines: 2,),
-            Text('movie.originalTitle', style: Theme.of(context).textTheme.subtitle1, overflow: TextOverflow.ellipsis, maxLines: 1,)
+            Text(
+              'movie.title',
+              style: textTheme.headline5,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+            Text(
+              'movie.originalTitle',
+              style: textTheme.subtitle1,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.star_border_outlined,
+                  size: 15,
+                ),
+                SizedBox(width: 5),
+                Text('movie.voteAverage', style: textTheme.caption)
+              ],
+            )
           ],
         )
       ]),
+    );
+  }
+}
+
+class _Overview extends StatelessWidget {
+  const _Overview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Text(
+        'Cillum ullamco labore occaecat consectetur nulla commodo qui irure esse consectetur. In non excepteur sunt aliqua non deserunt quis fugiat est consequat eu consequat amet ipsum. Est aliqua culpa qui anim dolore. Nisi Lorem incididunt consectetur quis aute enim culpa sint eu ullamco. Voluptate dolore sit ut velit exercitation quis nulla incididunt dolore ut do. Sint enim ex cillum voluptate amet dolore voluptate ad irure reprehenderit anim ex cupidatat cillum.',
+        textAlign: TextAlign.justify,
+        style: Theme.of(context).textTheme.subtitle1,
+      ),
     );
   }
 }
