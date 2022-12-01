@@ -14,6 +14,8 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
       //inicializamos las instancias, en este caso iniciamos instancia de movies_provider
+      //instaciomos movies_provider
+      //lazy:false, en cuanto cargue de inmediato provee, a diferencia de true que espera la necesidad
       ChangeNotifierProvider(create: (_)=> MoviesProvider(), lazy: false,)
     ],
     child: MyApp(),
