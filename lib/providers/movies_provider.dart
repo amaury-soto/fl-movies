@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:fl_movies_app/models/now_playing_response.dart';
+import 'package:fl_movies_app/models/popular_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/models.dart';
 
 //instancia movies_provider
 //Necesita extender de ChangeNotifier
@@ -12,23 +15,44 @@ class MoviesProvider extends ChangeNotifier {
   String _baseUrl = 'api.themoviedb.org';
   String _language = 'es-ES';
 
+  List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
+  int _popularPage = 0;
+
   MoviesProvider() {
     print('movies provider started...');
     //cuando el constructor sea llamado, mandamos a ejecutar los siguientes métodos
     getOnDisplayMovies();
+    getPopularMovies();
+  }
+
+  Future<String> _getJsonData(String endpoint, [int page = 1]) async {
+    var url = Uri.https(_baseUrl, endpoint, {
+      'api_key': _apiKey,
+      'language': _language,
+      'page': '$page',
+    });
+    final response = await http.get(url);
+    return response.body;
   }
 
   //metodo 1
   getOnDisplayMovies() async {
-    var url = Uri.https(_baseUrl, '3/movie/now_playing', {
-      'api_key': _apiKey,
-      'language': _language,
-      'page': '1',
-    });
+    final jsonData = await _getJsonData('3/movie/now_playing');
+    final nowPlayingResponse = NowPlayingResponse.fromJson(jsonData);
+    onDisplayMovies = nowPlayingResponse.results;
+    //Nofica a los widgets cuando hay un cambio en la data.
+    notifyListeners();
+  }
 
-    final response = await http.get(url);
-    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
-    final Map<String, dynamic> decodeData = json.decode(response.body);
-    print(nowPlayingResponse.results[1].title);
+  //metodo 1
+  getPopularMovies() async {
+    _popularPage++;
+    final jsonData = await _getJsonData('3/movie/popular', _popularPage);
+    final popularResponse = PopularResponse.fromJson(jsonData);
+    popularMovies = [...popularMovies, ...popularResponse.results];
+    print(popularMovies);
+    //Nofica a los widgets cuando hay un cambio en la data.
+    notifyListeners();
   }
 }
