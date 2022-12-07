@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: true);
-    print(moviesProvider.onDisplayMovies);
 
 
     return  Scaffold(
