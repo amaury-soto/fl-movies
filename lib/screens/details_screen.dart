@@ -10,14 +10,16 @@ class DetailsScreen extends StatelessWidget {
     //TODO: Cambiar por una instancia de movie
     final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
 
-
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           _CustomAppbar(movie),
           SliverList(
-              delegate: SliverChildListDelegate(
-                  [_PosterAndTitle(movie), _Overview(movie), CastingCard(movie.id)]))
+              delegate: SliverChildListDelegate([
+            _PosterAndTitle(movie),
+            _Overview(movie),
+            CastingCard(movie.id)
+          ]))
         ],
       ),
     );
@@ -42,9 +44,8 @@ class _CustomAppbar extends StatelessWidget {
         title: Container(
             width: double.infinity,
             alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.only(bottom: 10, left:20, right: 20),
+            padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
             color: Colors.black12,
-            
             child: Text(
               movie.title,
               style: TextStyle(fontSize: 16),
@@ -72,13 +73,16 @@ class _PosterAndTitle extends StatelessWidget {
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: FadeInImage(
-            placeholder: AssetImage('assets/no-image.jpg'),
-            image: NetworkImage(movie.fullPosterImg),
-            height: 150,
-            width: 110,
+        Hero(
+          tag: movie.heroId!,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: FadeInImage(
+              placeholder: AssetImage('assets/no-image.jpg'),
+              image: NetworkImage(movie.fullPosterImg),
+              height: 150,
+              width: 110,
+            ),
           ),
         ),
         SizedBox(

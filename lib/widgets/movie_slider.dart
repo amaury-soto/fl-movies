@@ -5,16 +5,16 @@ import '../models/models.dart';
 class MovieSlider extends StatefulWidget {
   final String? title;
   final List<Movie> movies;
-  final Function onNextPage; 
+  final Function onNextPage;
 
-  const MovieSlider({super.key, this.title, required this.movies, required this.onNextPage});
+  const MovieSlider(
+      {super.key, this.title, required this.movies, required this.onNextPage});
 
   @override
   State<MovieSlider> createState() => _MovieSliderState();
 }
 
 class _MovieSliderState extends State<MovieSlider> {
-
   final ScrollController scrollController = new ScrollController();
 
   //cuando el widget es construido
@@ -24,10 +24,10 @@ class _MovieSliderState extends State<MovieSlider> {
     scrollController.addListener(() {
       //print(scrollController.position.pixels);
 
-      if(scrollController.position.pixels >= scrollController.position.maxScrollExtent -500){
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 500) {
         widget.onNextPage();
       }
-
     });
   }
 
@@ -58,7 +58,9 @@ class _MovieSliderState extends State<MovieSlider> {
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.movies.length,
-                itemBuilder: (_, int index) => _MoviePoster(movie: widget.movies[index])),
+                itemBuilder: (_, int index) => _MoviePoster(
+                    movie: widget.movies[index],
+                    heroId:'${widget.title}-${index}-${widget.movies[index].id}')),
           )
         ],
       ),
@@ -68,10 +70,12 @@ class _MovieSliderState extends State<MovieSlider> {
 
 class _MoviePoster extends StatelessWidget {
   final Movie movie;
-  const _MoviePoster({required this.movie});
+  final String heroId;
+  const _MoviePoster({required this.movie, required this.heroId});
 
   @override
   Widget build(BuildContext context) {
+    movie.heroId = heroId;
     return Container(
       width: 130,
       height: 190,
@@ -79,16 +83,19 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'details',
-                arguments: movie),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage(movie.fullPosterImg),
-                width: 130,
-                height: 190,
-                fit: BoxFit.cover,
+            onTap: () =>
+                Navigator.pushNamed(context, 'details', arguments: movie),
+            child: Hero(
+              tag: movie.heroId!,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: FadeInImage(
+                  placeholder: AssetImage('assets/no-image.jpg'),
+                  image: NetworkImage(movie.fullPosterImg),
+                  width: 130,
+                  height: 190,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

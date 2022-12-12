@@ -16,6 +16,8 @@ class Movie {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    this.heroId,
+    
   });
 
   bool adult;
@@ -32,6 +34,7 @@ class Movie {
   bool video;
   double voteAverage;
   int voteCount;
+  String? heroId; 
 
   get fullPosterImg {
     if (posterPath != null) {
@@ -45,8 +48,6 @@ class Movie {
     }
     return 'https://i.stack.imgur.com/GNhxO.png';
   }
-
-  String? heroId;
 
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 
